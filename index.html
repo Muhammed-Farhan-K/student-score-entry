@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Score Entry</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://media.istockphoto.com/id/1366724877/photo/rear-view-of-mature-teacher-talking-to-his-student-during-lecture-at-university-classroom.jpg?s=612x612&w=0&k=20&c=PYpAFHxiUKX2i1D8w_ElnGsm1B64GBleyF-DfYTLcN0=');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 2rem 0;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 2rem 2.5rem;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+        h2 {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        .form-group label {
+            display: block;
+            color: #ccc;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #444;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: #333;
+            color: #e0e0e0;
+        }
+        .submit-btn, .search-btn, .low-marks-btn {
+            display: block;
+            width: 100%;
+            padding: 0.9rem;
+            border: none;
+            background-color: #6200ea;
+            color: #ffffff;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            margin-top: 1rem;
+        }
+        .submit-btn:hover, .search-btn:hover, .low-marks-btn:hover {
+            background-color: #3700b3;
+        }
+        /* Table Styling */
+        .table-container {
+            max-width: 800px;
+            width: 100%;
+            margin-top: 2rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #e0e0e0;
+        }
+        th, td {
+            padding: 0.8rem;
+            border: 1px solid #444;
+            text-align: center;
+        }
+        th {
+            background-color: #6200ea;
+            color: #ffffff;
+        }
+        .action-btn {
+            padding: 0.4rem 0.6rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .update-btn {
+            background-color: #0288d1;
+            color: white;
+            margin-right: 0.5rem;
+        }
+        .delete-btn {
+            background-color: #d32f2f;
+            color: white;
+        }
+        /* Style for update section */
+        .update-section {
+            display: none;
+            margin-top: 20px;
+            padding: 2rem;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            width: 80%;
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0, 0, 0, 0.8); 
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: rgba(0, 0, 0, 0.9);
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 1000px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Enter Student Internals</h2>
+        <form id="studentForm">
+            <!-- Class Selection -->
+            <div class="form-group">
+                <label for="class">Class</label>
+                <select id="class" name="class" required>
+                    <option value="">Select Class</option>
+                    <option value="CSE A">CSE A</option>
+                    <option value="CSE B">CSE B</option>
+                    <option value="AIDS">AIDS</option>
+                    <option value="IT">IT</option>
+                </select>
+            </div>
+
+            <!-- Roll No -->
+            <div class="form-group">
+                <label for="rollNo">Roll No</label>
+                <input type="number" id="rollNo" name="rollNo" required step="1" placeholder="Enter Roll Number">
+            </div>
+
+            <!-- Student Name -->
+            <div class="form-group">
+                <label for="studentName">Student Name</label>
+                <input type="text" id="studentName" name="studentName" required placeholder="Enter Student Name">
+            </div>
+
+            <!-- Internals Input -->
+            <div class="form-group">
+                <label for="internals">Internals</label>
+                <input type="number" id="internals" name="internals" min="0" max="50" required placeholder="Enter Score (0-50)">
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+
+    <!-- Search Section -->
+    <div class="container">
+        <h2>Search Student</h2>
+        <form id="searchForm">
+            <!-- Search by Class -->
+            <div class="form-group">
+                <label for="searchClass">Class</label>
+                <select id="searchClass" name="searchClass">
+                    <option value="">Select Class</option>
+                    <option value="CSE A">CSE A</option>
+                    <option value="CSE B">CSE B</option>
+                    <option value="AIDS">AIDS</option>
+                    <option value="IT">IT</option>
+                </select>
+            </div>
+
+            <!-- Search by Roll No -->
+            <div class="form-group">
+                <label for="searchRollNo">Roll No</label>
+                <input type="text" id="searchRollNo" name="searchRollNo" placeholder="Enter Roll Number or * for all">
+            </div>
+
+            <!-- Search Button -->
+            <button type="button" class="search-btn" onclick="searchStudent()">Search</button>
+        </form>
+    </div>
+
+    <!-- Show Students with Less than 35 Marks Button -->
+    <div class="container">
+        <button type="button" class="low-marks-btn" onclick="showLowMarksStudents()">Show Students with Less Than 35 Marks</button>
+    </div>
+
+    <!-- Update Section -->
+    <div class="update-section" id="updateSection">
+        <h2>Update Student Details</h2>
+        <form id="updateForm">
+            <div class="form-group">
+                <label for="updateClass">Class</label>
+                <input type="text" id="updateClass" name="updateClass" readonly>
+            </div>
+            <div class="form-group">
+                <label for="updateRollNo">Roll No</label>
+                <input type="text" id="updateRollNo" name="updateRollNo" readonly>
+            </div>
+            <div class="form-group">
+                <label for="updateStudentName">Student Name</label>
+                <input type="text" id="updateStudentName" name="updateStudentName" required>
+            </div>
+            <div class="form-group">
+                <label for="updateInternals">Internals</label>
+                <input type="number" id="updateInternals" name="updateInternals" min="0" max="50" required>
+            </div>
+            <button type="submit" class="submit-btn">Update</button>
+        </form>
+    </div>
+
+    <!-- Modal for Displaying Search Results -->
+    <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Search Results</h2>
+            <div id="searchResults"></div>
+        </div>
+    </div>
+
+    <!-- Modal for Displaying Students with Less than 35 Marks -->
+    <div id="lowMarksModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLowMarksModal()">&times;</span>
+            <h2>Students with Less Than 35 Marks</h2>
+            <div id="lowMarksResults"></div>
+        </div>
+    </div>
+
+    <!-- Table to Display Student List -->
+    <div class="table-container">
+        <table id="studentTable">
+            <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Roll No</th>
+                    <th>Student Name</th>
+                    <th>Internals</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="studentTableBody"></tbody>
+        </table>
+    </div>
+
+    <script>
+        let students = [];
+
+        // Handle form submission
+        document.getElementById('studentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const className = document.getElementById('class').value;
+            const rollNo = document.getElementById('rollNo').value;
+            const studentName = document.getElementById('studentName').value;
+            const internals = document.getElementById('internals').value;
+
+            // Check for duplicate entry (same class and roll number)
+            const isDuplicate = students.some(student => student.class === className && student.rollNo === rollNo);
+
+            if (isDuplicate) {
+                alert("Duplicate entry detected. This student is already added.");
+                return;
+            }
+
+            const newStudent = {
+                class: className,
+                rollNo: rollNo,
+                studentName: studentName,
+                internals: internals
+            };
+
+            students.push(newStudent);
+            updateTable();
+            document.getElementById('studentForm').reset();
+        });
+
+        function updateTable() {
+            const studentTableBody = document.getElementById('studentTableBody');
+            studentTableBody.innerHTML = '';
+
+            students.forEach((student, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${student.class}</td>
+                    <td>${student.rollNo}</td>
+                    <td>${student.studentName}</td>
+                    <td>${student.internals}</td>
+                    <td>
+                        <button class="action-btn update-btn" onclick="editStudent(${index})">Update</button>
+                        <button class="action-btn delete-btn" onclick="deleteStudent(${index})">Delete</button>
+                    </td>
+                `;
+                studentTableBody.appendChild(row);
+            });
+        }
+
+        function editStudent(index) {
+            const student = students[index];
+            document.getElementById('updateClass').value = student.class;
+            document.getElementById('updateRollNo').value = student.rollNo;
+            document.getElementById('updateStudentName').value = student.studentName;
+            document.getElementById('updateInternals').value = student.internals;
+
+            document.getElementById('updateSection').style.display = 'block';
+
+            document.getElementById('updateForm').onsubmit = function(e) {
+                e.preventDefault();
+
+                student.studentName = document.getElementById('updateStudentName').value;
+                student.internals = document.getElementById('updateInternals').value;
+
+                updateTable();
+                document.getElementById('updateSection').style.display = 'none';
+            };
+        }
+
+        function deleteStudent(index) {
+            students.splice(index, 1);
+            updateTable();
+        }
+
+        // Search functionality
+        function searchStudent() {
+            const searchClass = document.getElementById('searchClass').value;
+            const searchRollNo = document.getElementById('searchRollNo').value;
+
+            let filteredStudents = students;
+
+            if (searchClass) {
+                filteredStudents = filteredStudents.filter(student => student.class === searchClass);
+            }
+
+            if (searchRollNo && searchRollNo !== '*') {
+                filteredStudents = filteredStudents.filter(student => student.rollNo === searchRollNo);
+            }
+
+            const resultDiv = document.getElementById('searchResults');
+            resultDiv.innerHTML = '';
+            if (filteredStudents.length === 0) {
+                resultDiv.innerHTML = '<p>No results found.</p>';
+            } else {
+                let resultHtml = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>Roll No</th>
+                                <th>Student Name</th>
+                                <th>Internals</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+                
+                filteredStudents.forEach(student => {
+                    resultHtml += `
+                        <tr>
+                            <td>${student.class}</td>
+                            <td>${student.rollNo}</td>
+                            <td>${student.studentName}</td>
+                            <td>${student.internals}</td>
+                        </tr>
+                    `;
+                });
+
+                resultHtml += '</tbody></table>';
+                resultDiv.innerHTML = resultHtml;
+            }
+
+            openModal();
+        }
+
+        function openModal() {
+            const modal = document.getElementById('resultModal');
+            modal.style.display = "block";
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('resultModal');
+            modal.style.display = "none";
+        }
+
+        function showLowMarksStudents() {
+            // Group students by class
+            const lowMarksStudents = students.filter(student => parseInt(student.internals) < 35);
+            const groupedByClass = lowMarksStudents.reduce((acc, student) => {
+                if (!acc[student.class]) {
+                    acc[student.class] = [];
+                }
+                acc[student.class].push(student);
+                return acc;
+            }, {});
+
+            const resultDiv = document.getElementById('lowMarksResults');
+            resultDiv.innerHTML = '';
+
+            if (Object.keys(groupedByClass).length === 0) {
+                resultDiv.innerHTML = '<p>No students found with marks less than 35.</p>';
+            } else {
+                let resultHtml = '';
+
+                // Display each class group
+                for (const className in groupedByClass) {
+                    resultHtml += `<h3>${className}</h3>`;
+                    resultHtml += `
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Class</th>
+                                    <th>Roll No</th>
+                                    <th>Student Name</th>
+                                    <th>Internals</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+                    
+                    groupedByClass[className].forEach(student => {
+                        resultHtml += `
+                            <tr>
+                                <td>${student.class}</td>
+                                <td>${student.rollNo}</td>
+                                <td>${student.studentName}</td>
+                                <td>${student.internals}</td>
+                            </tr>
+                        `;
+                    });
+
+                    resultHtml += '</tbody></table>';
+                }
+
+                resultDiv.innerHTML = resultHtml;
+            }
+
+            openLowMarksModal();
+        }
+
+        function openLowMarksModal() {
+            const modal = document.getElementById('lowMarksModal');
+            modal.style.display = "block";
+        }
+
+        function closeLowMarksModal() {
+            const modal = document.getElementById('lowMarksModal');
+            modal.style.display = "none";
+        }
+    </script>
+</body>
+</html>
